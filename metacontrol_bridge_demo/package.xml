@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>metacontrol_bridge_demo</name>
+  <version>0.0.0</version>
+  <description>The metacontrol_bridge_demo package</description>
+
+  <maintainer email="fmrico@todo.todo">fmrico</maintainer>
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>metacontrol_bridge</build_depend>
+  <build_depend>rospy</build_depend>
+
+  <build_export_depend>metacontrol_bridge</build_export_depend>
+  <build_export_depend>rospy</build_export_depend>
+
+  <exec_depend>metacontrol_bridge</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>lifecycle_msgs</exec_depend>
+
+  <export>
+  </export>
+</package>
