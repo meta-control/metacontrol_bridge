@@ -19,45 +19,63 @@ class MetacontrolNode:
     
     def handle_change_state(self, req):
         if self.state.id == State.PRIMARY_STATE_UNCONFIGURED and req.transition.id == Transition.TRANSITION_CONFIGURE:
-            ret_value = self.on_configure()
+            ret_value = self.on_configure(self.state)
             if ret_value:
                 self.state.id = State.PRIMARY_STATE_INACTIVE
                 self.state.label = "inactive"
             return ChangeStateResponse(ret_value)
         elif self.state.id == State.PRIMARY_STATE_INACTIVE and req.transition.id == Transition.TRANSITION_ACTIVATE:
-            ret_value = self.on_activate()
+            ret_value = self.on_activate(self.state)
             if ret_value:
                 self.state.id = State.PRIMARY_STATE_ACTIVE
                 self.state.label = "active"
             return ChangeStateResponse(ret_value)
         elif self.state.id == State.PRIMARY_STATE_INACTIVE and req.transition.id == Transition.TRANSITION_CLEANUP:
-            ret_value = self.on_cleanup()
+            ret_value = self.on_cleanup(self.state)
             if ret_value:
                 self.state.id = State.PRIMARY_STATE_UNCONFIGURED
                 self.state.label = "unconfigured"
             return ChangeStateResponse(ret_value)
         elif self.state.id == State.PRIMARY_STATE_ACTIVE and req.transition.id == Transition.TRANSITION_DEACTIVATE:
-            ret_value = self.on_deactivate()
+            ret_value = self.on_deactivate(self.state)
             if ret_value:
                 self.state.id = State.PRIMARY_STATE_INACTIVE
                 self.state.label = "inactive"
+            return ChangeStateResponse(ret_value)
+        if self.state.id == State.PRIMARY_STATE_UNCONFIGURED and req.transition.id == Transition.TRANSITION_UNCONFIGURED_SHUTDOWN:
+            ret_value = self.on_shutdown(self.state)
+            if ret_value:
+                self.state.id = State.PRIMARY_STATE_FINALIZED
+                self.state.label = "finalized"
+            return ChangeStateResponse(ret_value)
+        elif self.state.id == State.PRIMARY_STATE_INACTIVE and req.transition.id == Transition.TRANSITION_INACTIVE_SHUTDOWN:
+            ret_value = self.on_shutdown(self.state)
+            if ret_value:
+                self.state.id = State.PRIMARY_STATE_FINALIZED
+                self.state.label = "finalized"
+            return ChangeStateResponse(ret_value)
+        elif self.state.id == State.PRIMARY_STATE_ACTIVE and req.transition.id == Transition.TRANSITION_ACTIVE_SHUTDOWN:
+            ret_value = self.on_shutdown(self.state)
+            if ret_value:
+                self.state.id = State.PRIMARY_STATE_FINALIZED
+                self.state.label = "finalized"
             return ChangeStateResponse(ret_value)
         return ChangeStateResponse(False)
 
     def handle_get_state(self, req):
         return GetStateResponse(self.state)
 
-    def on_configure(self):
+    def on_configure(self, previous):
         return True
 
-    def on_cleanup(self):
+    def on_cleanup(self, previous):
        return True
 
-    def on_activate(self):
+    def on_activate(self, previous):
        return True
 
-    def on_deactivate(self):
+    def on_deactivate(self, previous):
        return True
 
-    def on_shutdown(self):
+    def on_shutdown(self, previous):
        return True
