@@ -8,6 +8,13 @@ class MyNode(MetacontrolNode):
     
     def on_configure(self, previous):
         print("CONFIGURING")
+
+        param0_value = rospy.get_param('~param0', 1.0)
+        param1_value = rospy.get_param('~param1', "hello")
+
+        print("param0 value is [%lf]" % param0_value)
+        print("param1 value is [%s]" % param1_value)
+
         return True
 
     def on_cleanup(self, previous):
