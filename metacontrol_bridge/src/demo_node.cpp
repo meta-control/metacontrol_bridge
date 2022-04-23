@@ -1,4 +1,4 @@
-// Copyright 2015 Open Source Robotics Foundation, Inc.
+// Copyright 2022 Intelligent Robotics Lab
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -47,11 +47,11 @@ public:
 
 int main(int argc, char * argv[])
 {
-  // ROS 2 node and publisher
+  // ROS 2 node
   rclcpp::init(argc, argv);
   auto node = std::make_shared<DemoNode>("demo_bridge");
 
-  // ROS 1 node and subscriber
+  // ROS 1 node
   ros::init(argc, argv, "demo_bridge");
   ros::NodeHandle n;
 
