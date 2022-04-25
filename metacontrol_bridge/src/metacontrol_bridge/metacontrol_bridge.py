@@ -1,4 +1,3 @@
-from sqlalchemy import true
 import rospy
 
 from lifecycle_msgs.srv import ChangeState, GetState, ChangeStateResponse, GetStateResponse
