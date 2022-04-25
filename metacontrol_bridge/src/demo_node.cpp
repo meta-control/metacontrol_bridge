@@ -42,6 +42,19 @@ public:
     const rclcpp::NodeOptions & options = rclcpp::NodeOptions())
   : MetacontrolNode(node_name, options)
   {
+    declare_parameter<double>("param0", 2.0);
+    declare_parameter<std::string>("param1", "bye");
+  }
+};
+
+class LookToPointNode : public metacontrol_bridge::MetacontrolNode
+{
+public:
+  LookToPointNode(
+    const std::string & node_name,
+    const rclcpp::NodeOptions & options = rclcpp::NodeOptions())
+  : MetacontrolNode(node_name, options)
+  {
   }
 };
 
@@ -49,16 +62,19 @@ int main(int argc, char * argv[])
 {
   // ROS 2 node
   rclcpp::init(argc, argv);
-  auto node = std::make_shared<DemoNode>("demo_bridge");
-
-  // ROS 1 node
   ros::init(argc, argv, "demo_bridge");
-  ros::NodeHandle n;
+
+  auto node_demo = std::make_shared<DemoNode>("demo_bridge_node");
+  auto node_look_to_point = std::make_shared<LookToPointNode>("look_to_point");
+
+  rclcpp::executors::SingleThreadedExecutor exe;
+  exe.add_node(node_demo->get_node_base_interface());
+  exe.add_node(node_look_to_point->get_node_base_interface());
 
   rclcpp::Rate rate(10);
   while (ros::ok() && rclcpp::ok()) {
     ros::spinOnce();
-    rclcpp::spin_some(node->get_node_base_interface());
+    exe.spin_some();
     rate.sleep();
   }
   

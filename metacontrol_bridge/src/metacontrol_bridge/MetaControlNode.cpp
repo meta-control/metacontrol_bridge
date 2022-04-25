@@ -48,6 +48,62 @@ CallbackReturn
 MetacontrolNode::on_configure(const rclcpp_lifecycle::State & previous_state)
 {
   (void) previous_state;
+
+  auto params = list_parameters({}, 10);
+  auto param_types = get_parameter_types(params.names);
+
+  for (size_t i = 0; i < params.names.size(); i++) {
+    const std::string & param_key = params.names[i];
+    std::string ros1_param_name = "/" + std::string(get_name()) + "/" + param_key;
+
+    switch(param_types[i]) {
+      case rcl_interfaces::msg::ParameterType::PARAMETER_BOOL:
+        nh_.setParam(ros1_param_name, get_parameter(param_key).get_value<bool>());
+        break;
+      case rcl_interfaces::msg::ParameterType::PARAMETER_INTEGER:
+        {
+          int int_value = get_parameter(param_key).get_value<int>();
+          nh_.setParam(ros1_param_name, int_value);
+        }
+        break;
+      case rcl_interfaces::msg::ParameterType::PARAMETER_DOUBLE:
+        nh_.setParam(ros1_param_name, get_parameter(param_key).get_value<double>());
+        break;
+      case rcl_interfaces::msg::ParameterType::PARAMETER_STRING:
+       nh_.setParam(ros1_param_name, get_parameter(param_key).get_value<std::string>());
+       break;
+      case rcl_interfaces::msg::ParameterType::PARAMETER_BYTE_ARRAY:
+       // nh_.setParam(ros1_param_name, get_parameter(param_key).get_value<std::vector<uint8_t>>());
+       RCLCPP_WARN(get_logger(), "bridge for PARAMETER_BYTE_ARRAY not implemented yet");
+       break;
+      case rcl_interfaces::msg::ParameterType::PARAMETER_BOOL_ARRAY:
+       {
+         std::vector<bool> vbool_value = get_parameter(param_key).get_value<std::vector<bool>>();
+         nh_.setParam(ros1_param_name, vbool_value);
+       }
+       break;
+      case rcl_interfaces::msg::ParameterType::PARAMETER_INTEGER_ARRAY:
+       {
+         RCLCPP_WARN(get_logger(), "bridge for PARAMETER_BYTE_ARRAY not implemented yet");
+         // std::vector<int> vint_values = get_parameter(param_key).get_value<std::vector<int>>();
+         // nh_.setParam(ros1_param_name, vint_values);
+       }
+       break;
+      case rcl_interfaces::msg::ParameterType::PARAMETER_DOUBLE_ARRAY:
+       {
+         std::vector<double> vdouble_values = get_parameter(param_key).get_value<std::vector<double>>();
+         nh_.setParam(ros1_param_name, vdouble_values);
+       }
+       break;
+      case rcl_interfaces::msg::ParameterType::PARAMETER_STRING_ARRAY:
+       {
+         std::vector<std::string> vstring_values = get_parameter(param_key).get_value<std::vector<std::string>>();
+         nh_.setParam(ros1_param_name, vstring_values);
+       }
+       break;
+    };
+  }
+
   return trigger_trasition_ros1(lifecycle_msgs::msg::Transition::TRANSITION_CONFIGURE);
 }
 
