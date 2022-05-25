@@ -67,7 +67,7 @@ if __name__ == '__main__':
   rospy.spin()
 ```
 
-This is the node whose state and parameters can be changed from ROS2. This node has a `~/change_state` method that allows its state to be changed, using a service in the interfaces of the [`lifecycle_msgs` package](https://github.com/meta-control/metacontrol_bridge/tree/noetic/lifecycle_msgs).
+This is the node whose state and parameters can be changed from ROS2. This node has a `~/change_state` service that allows its state to be changed, using a service in the interfaces of the [`lifecycle_msgs` package](https://github.com/meta-control/metacontrol_bridge/tree/noetic/lifecycle_msgs).
 
 ### Build
 
